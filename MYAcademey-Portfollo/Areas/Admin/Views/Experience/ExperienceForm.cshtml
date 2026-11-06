@@ -1,0 +1,62 @@
+@model Experience
+@{
+    ViewData["Title"] = ViewBag.FormTitle;
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">@ViewBag.FormTitle</h1>
+        </div>
+    </div>
+
+    <div class="form-card">
+        <form method="post">
+            <input type="hidden" asp-for="ExperienceId" />
+
+            <div class="form-group-custom">
+                <label asp-for="Title" class="form-label-custom">Deneyim Başlığı <span class="required-star">*</span></label>
+                <input asp-for="Title" class="form-control-custom" placeholder="Ör: Junior Backend Developer" />
+                <span asp-validation-for="Title" class="field-error"></span>
+            </div>
+
+            <div class="row">
+                <div class="col-md-7 form-group-custom">
+                    <label asp-for="CompanyName" class="form-label-custom">Şirket / Kurum <span class="required-star">*</span></label>
+                    <input asp-for="CompanyName" class="form-control-custom" />
+                    <span asp-validation-for="CompanyName" class="field-error"></span>
+                </div>
+                <div class="col-md-5 form-group-custom">
+                    <label asp-for="CategoryName" class="form-label-custom">Çalışma Türü</label>
+                    <input asp-for="CategoryName" class="form-control-custom" list="workTypes" placeholder="Ör: Tam Zamanlı" />
+                    <datalist id="workTypes">
+                        <option value="Tam Zamanlı"></option>
+                        <option value="Yarı Zamanlı"></option>
+                        <option value="Uzaktan"></option>
+                        <option value="Hibrit"></option>
+                        <option value="Staj"></option>
+                        <option value="Serbest"></option>
+                    </datalist>
+                    <span asp-validation-for="CategoryName" class="field-error"></span>
+                </div>
+            </div>
+
+            <div class="form-group-custom">
+                <label asp-for="Description" class="form-label-custom">Açıklama <span class="required-star">*</span></label>
+                <textarea asp-for="Description" class="form-control-custom" rows="4"></textarea>
+                <span asp-validation-for="Description" class="field-error"></span>
+            </div>
+
+            <div class="form-group-custom form-check form-switch">
+                <input asp-for="IsActive" class="form-check-input" role="switch" />
+                <label asp-for="IsActive" class="form-check-label">Aktif (sitede gösterilsin)</label>
+            </div>
+
+            <div class="form-actions">
+                <a href="/Admin/Experience/ExperienceList" class="btn-pastel-secondary">Vazgeç</a>
+                <button type="submit" class="btn-pastel-primary">Kaydet</button>
+            </div>
+        </form>
+    </div>
+</main>

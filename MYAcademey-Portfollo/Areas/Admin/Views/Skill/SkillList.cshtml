@@ -1,0 +1,103 @@
+@model List<Skill>
+@{
+    ViewData["Title"] = "Yeteneklerim";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Yeteneklerim</h1>
+            <p class="page-subtitle">Yetenek gruplarını ve her gruptaki yeteneklerin 0-100 seviyesini yönetin.</p>
+        </div>
+        <div class="header-actions">
+            <a href="/Admin/Skill/CreateSkillItem" class="btn-pastel-secondary">
+                <i class="bi bi-plus-lg"></i>
+                <span>Yeni Yetenek</span>
+            </a>
+            <a href="/Admin/Skill/CreateSkill" class="btn-pastel-primary">
+                <i class="bi bi-plus-circle-fill"></i>
+                <span>Yeni Yetenek Grubu</span>
+            </a>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="data-table-card empty-state">
+            <i class="bi bi-stars"></i>
+            Henüz yetenek grubu eklenmemiş. Önce "Yeni Yetenek Grubu" ile bir grup oluşturun (ör: Backend Geliştirme).
+        </div>
+    }
+
+    @foreach (var group in Model)
+    {
+        <div class="skill-group-card">
+            <div class="skill-group-header">
+                <div class="d-flex align-items-center gap-3">
+                    <span class="skill-group-icon"><i class="@(string.IsNullOrWhiteSpace(group.IconUrl) ? "bi bi-stack" : group.IconUrl)"></i></span>
+                    <div>
+                        <div class="fw-bold">@group.Title</div>
+                        <small class="text-muted">@group.Description</small>
+                    </div>
+                </div>
+                <div class="row-actions-group">
+                    <a href="/Admin/Skill/CreateSkillItem?skillId=@group.SkillId" class="btn-action-icon btn-view" title="Bu gruba yetenek ekle">
+                        <i class="bi bi-plus-lg"></i>
+                    </a>
+                    <a href="/Admin/Skill/UpdateSkill/@group.SkillId" class="btn-action-icon btn-edit" title="Grubu güncelle">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <a href="/Admin/Skill/DeleteSkill/@group.SkillId" class="btn-action-icon btn-delete js-confirm-delete"
+                       data-text="'@group.Title' grubu ve içindeki tüm yetenekler silinecek." title="Grubu sil">
+                        <i class="bi bi-trash3"></i>
+                    </a>
+                </div>
+            </div>
+
+            @if (group.SkillItems == null || !group.SkillItems.Any())
+            {
+                <div class="empty-state py-3">Bu grupta henüz yetenek yok.</div>
+            }
+            else
+            {
+                <div class="table-responsive-wrapper">
+                    <table class="custom-admin-table">
+                        <thead>
+                            <tr>
+                                <th>Yetenek</th>
+                                <th style="width: 45%;">Seviye</th>
+                                <th style="text-align: right; width: 110px;">İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in group.SkillItems.OrderByDescending(x => x.Level))
+                            {
+                                <tr>
+                                    <td class="fw-semibold">@item.SkillItemTitle</td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="level-bar flex-grow-1"><span style="width: @item.Level%;"></span></div>
+                                            <span class="order-badge">@item.Level</span>
+                                        </div>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <div class="row-actions-group justify-content-end">
+                                            <a href="/Admin/Skill/UpdateSkillItem/@item.SkillItemId" class="btn-action-icon btn-edit" title="Güncelle">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            <a href="/Admin/Skill/DeleteSkillItem/@item.SkillItemId" class="btn-action-icon btn-delete js-confirm-delete" title="Sil">
+                                                <i class="bi bi-trash3"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    }
+</main>

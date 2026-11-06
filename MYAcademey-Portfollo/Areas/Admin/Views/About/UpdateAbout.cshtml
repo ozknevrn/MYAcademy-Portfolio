@@ -1,0 +1,58 @@
+@model About
+@{
+    ViewData["Title"] = "Hakkımda";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Hakkımda</h1>
+            <p class="page-subtitle">Sitedeki "Beni Tanıyın" bölümünün başlığı, yazısı ve fotoğrafı.</p>
+        </div>
+        <div class="header-actions">
+            <a href="/#about" target="_blank" class="btn-pastel-secondary">
+                <i class="bi bi-box-arrow-up-right"></i>
+                <span>Sitede Gör</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="form-card">
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="AboutId" />
+            <input type="hidden" asp-for="ImageUrl" />
+
+            <div class="form-group-custom">
+                <label asp-for="Title" class="form-label-custom">Başlık <span class="required-star">*</span></label>
+                <input asp-for="Title" class="form-control-custom" placeholder="Ör: Teknolojiye Tutkuyla Bağlı Bir Yolculuk." />
+                <span asp-validation-for="Title" class="field-error"></span>
+            </div>
+
+            <div class="form-group-custom">
+                <label asp-for="Description" class="form-label-custom">Hakkımda Yazısı <span class="required-star">*</span></label>
+                <textarea asp-for="Description" class="form-control-custom" rows="8"></textarea>
+                <div class="form-hint">Paragraf oluşturmak için satırlar arasında boş satır bırakın.</div>
+                <span asp-validation-for="Description" class="field-error"></span>
+            </div>
+
+            <div class="form-group-custom">
+                <label class="form-label-custom" for="imageFile">Fotoğraf</label>
+                <input type="file" name="imageFile" id="imageFile" class="form-control-custom" accept=".jpg,.jpeg,.png,.webp" data-preview="#imagePreview" />
+                @Html.ValidationMessage("imageFile", null, new { @class = "field-error" })
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <img src="@Model.ImageUrl" id="imagePreview" class="image-preview" alt="Hakkımda fotoğrafı" />
+                }
+                else
+                {
+                    <img id="imagePreview" class="image-preview d-none" alt="Önizleme" />
+                }
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-pastel-primary">Kaydet</button>
+            </div>
+        </form>
+    </div>
+</main>

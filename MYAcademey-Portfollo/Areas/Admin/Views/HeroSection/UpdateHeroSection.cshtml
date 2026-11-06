@@ -1,0 +1,120 @@
+@model HeroSection
+@{
+    ViewData["Title"] = "Ana Sayfa";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+    var heroTitles = ViewBag.HeroTitles as List<HeroTitle> ?? new List<HeroTitle>();
+}
+
+<main class="page-content-area">
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Ana Sayfa (Hero) Alanı</h1>
+            <p class="page-subtitle">Sitenin en üstünde görünen isim, unvan, tanıtım, fotoğraf ve öne çıkan bilgiler.</p>
+        </div>
+        <div class="header-actions">
+            <a href="/#home" target="_blank" class="btn-pastel-secondary">
+                <i class="bi bi-box-arrow-up-right"></i>
+                <span>Sitede Gör</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-xl-7">
+            <div class="form-card">
+                <form method="post" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="HeroSectionId" />
+                    <input type="hidden" asp-for="MainImageUrl" />
+
+                    <div class="form-group-custom">
+                        <label asp-for="Greeting" class="form-label-custom">Ad Soyad <span class="required-star">*</span></label>
+                        <input asp-for="Greeting" class="form-control-custom" placeholder="Ör: Özkan Evren" />
+                        <span asp-validation-for="Greeting" class="field-error"></span>
+                    </div>
+
+                    <div class="form-group-custom">
+                        <label asp-for="Title" class="form-label-custom">Unvan <span class="required-star">*</span></label>
+                        <input asp-for="Title" class="form-control-custom" placeholder="Ör: Yazılım Mühendisi" />
+                        <span asp-validation-for="Title" class="field-error"></span>
+                    </div>
+
+                    <div class="form-group-custom">
+                        <label asp-for="Description" class="form-label-custom">Tanıtım Yazısı <span class="required-star">*</span></label>
+                        <textarea asp-for="Description" class="form-control-custom" rows="4"></textarea>
+                        <span asp-validation-for="Description" class="field-error"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 form-group-custom">
+                            <label asp-for="ExperienceYear" class="form-label-custom">Deneyim (öne çıkan)</label>
+                            <input asp-for="ExperienceYear" class="form-control-custom" placeholder="Ör: 10+" />
+                            <span asp-validation-for="ExperienceYear" class="field-error"></span>
+                        </div>
+                        <div class="col-md-6 form-group-custom">
+                            <label asp-for="StudentCount" class="form-label-custom">Öğrenci / Topluluk (öne çıkan)</label>
+                            <input asp-for="StudentCount" class="form-control-custom" placeholder="Ör: 200K+" />
+                            <span asp-validation-for="StudentCount" class="field-error"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group-custom">
+                        <label class="form-label-custom" for="imageFile">Profil Fotoğrafı</label>
+                        <input type="file" name="imageFile" id="imageFile" class="form-control-custom" accept=".jpg,.jpeg,.png,.webp" data-preview="#imagePreview" />
+                        @Html.ValidationMessage("imageFile", null, new { @class = "field-error" })
+                        @if (!string.IsNullOrEmpty(Model.MainImageUrl))
+                        {
+                            <img src="@Model.MainImageUrl" id="imagePreview" class="image-preview" alt="Profil fotoğrafı" />
+                        }
+                        else
+                        {
+                            <img id="imagePreview" class="image-preview d-none" alt="Önizleme" />
+                        }
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-pastel-primary">Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-xl-5">
+            <div class="form-card">
+                <h5 class="fw-bold mb-1">Dönen Unvanlar</h5>
+                <p class="form-hint mb-3">Ana sayfada yazı makinesi efektiyle sırayla gösterilir. Sadece aktif olanlar görünür.</p>
+
+                <form method="post" action="/Admin/HeroSection/AddHeroTitle" class="d-flex gap-2 mb-3">
+                    <input type="text" name="Title" class="form-control-custom" placeholder="Ör: Yapay Zeka Meraklısı" maxlength="50" required />
+                    <input type="number" name="Order" class="form-control-custom" style="max-width: 80px;" value="@(heroTitles.Count + 1)" min="0" max="100" title="Sıra" />
+                    <button type="submit" class="btn-pastel-primary"><i class="bi bi-plus-lg"></i></button>
+                </form>
+
+                <table class="custom-admin-table">
+                    <tbody>
+                        @if (!heroTitles.Any())
+                        {
+                            <tr><td class="empty-state py-3">Henüz unvan eklenmemiş.</td></tr>
+                        }
+                        @foreach (var item in heroTitles)
+                        {
+                            <tr>
+                                <td style="width: 40px;"><span class="order-badge">@item.Order</span></td>
+                                <td class="fw-semibold">@item.Title</td>
+                                <td style="text-align: right;">
+                                    <div class="row-actions-group justify-content-end">
+                                        <a href="/Admin/HeroSection/ToggleHeroTitle/@item.HeroTitleId" class="text-decoration-none">
+                                            <span class="status-pill @(item.IsActive ? "status-active" : "status-passive")">@(item.IsActive ? "Aktif" : "Pasif")</span>
+                                        </a>
+                                        <a href="/Admin/HeroSection/DeleteHeroTitle/@item.HeroTitleId" class="btn-action-icon btn-delete js-confirm-delete" title="Sil">
+                                            <i class="bi bi-trash3"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>

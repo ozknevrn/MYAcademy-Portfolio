@@ -1,0 +1,51 @@
+@model SocialMedia
+@{
+    ViewData["Title"] = ViewBag.FormTitle;
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">@ViewBag.FormTitle</h1>
+        </div>
+    </div>
+
+    <div class="form-card">
+        <form method="post">
+            <input type="hidden" asp-for="SocialMediaId" />
+
+            <div class="row">
+                <div class="col-md-6 form-group-custom">
+                    <label asp-for="Platform" class="form-label-custom">Platform <span class="required-star">*</span></label>
+                    <input asp-for="Platform" class="form-control-custom" placeholder="Ör: GitHub" />
+                    <span asp-validation-for="Platform" class="field-error"></span>
+                </div>
+                <div class="col-md-6 form-group-custom">
+                    <label asp-for="IconClass" class="form-label-custom">İkon</label>
+                    <input asp-for="IconClass" class="form-control-custom" list="iconList" placeholder="Ör: bi bi-github" />
+                    <datalist id="iconList">
+                        <option value="bi bi-github"></option>
+                        <option value="bi bi-linkedin"></option>
+                        <option value="bi bi-youtube"></option>
+                        <option value="bi bi-instagram"></option>
+                        <option value="bi bi-twitter-x"></option>
+                        <option value="bi bi-medium"></option>
+                    </datalist>
+                    <span asp-validation-for="IconClass" class="field-error"></span>
+                </div>
+            </div>
+
+            <div class="form-group-custom">
+                <label asp-for="Url" class="form-label-custom">Bağlantı <span class="required-star">*</span></label>
+                <input asp-for="Url" class="form-control-custom" placeholder="https://github.com/kullaniciadi" />
+                <span asp-validation-for="Url" class="field-error"></span>
+            </div>
+
+            <div class="form-actions">
+                <a href="/Admin/SocialMedia/SocialMediaList" class="btn-pastel-secondary">Vazgeç</a>
+                <button type="submit" class="btn-pastel-primary">Kaydet</button>
+            </div>
+        </form>
+    </div>
+</main>

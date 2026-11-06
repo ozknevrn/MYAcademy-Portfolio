@@ -1,0 +1,55 @@
+@model Contact
+@{
+    ViewData["Title"] = ViewBag.FormTitle;
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">@ViewBag.FormTitle</h1>
+        </div>
+    </div>
+
+    <div class="form-card">
+        <form method="post">
+            <input type="hidden" asp-for="ContactId" />
+
+            <div class="form-group-custom">
+                <label asp-for="Title" class="form-label-custom">Başlık <span class="required-star">*</span></label>
+                <input asp-for="Title" class="form-control-custom" placeholder="Ör: İletişime Geçelim" />
+                <span asp-validation-for="Title" class="field-error"></span>
+            </div>
+
+            <div class="form-group-custom">
+                <label asp-for="Description" class="form-label-custom">Açıklama</label>
+                <textarea asp-for="Description" class="form-control-custom" rows="3"></textarea>
+                <span asp-validation-for="Description" class="field-error"></span>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 form-group-custom">
+                    <label asp-for="Email" class="form-label-custom">E-posta <span class="required-star">*</span></label>
+                    <input asp-for="Email" class="form-control-custom" placeholder="ornek@mail.com" />
+                    <span asp-validation-for="Email" class="field-error"></span>
+                </div>
+                <div class="col-md-6 form-group-custom">
+                    <label asp-for="PhoneNumber" class="form-label-custom">Telefon</label>
+                    <input asp-for="PhoneNumber" class="form-control-custom" placeholder="0555 555 55 55" />
+                    <span asp-validation-for="PhoneNumber" class="field-error"></span>
+                </div>
+            </div>
+
+            <div class="form-group-custom">
+                <label asp-for="Location" class="form-label-custom">Konum</label>
+                <input asp-for="Location" class="form-control-custom" placeholder="Ör: İstanbul, Türkiye" />
+                <span asp-validation-for="Location" class="field-error"></span>
+            </div>
+
+            <div class="form-actions">
+                <a href="/Admin/Contact/ContactList" class="btn-pastel-secondary">Vazgeç</a>
+                <button type="submit" class="btn-pastel-primary">Kaydet</button>
+            </div>
+        </form>
+    </div>
+</main>

@@ -1,0 +1,122 @@
+﻿@model List<Experience>
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Deneyimlerim";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+    string status = ViewBag.Status ?? "";
+    var statusItems = new List<SelectListItem>
+    {
+        new SelectListItem("Durum (Tümü)", "", status == ""),
+        new SelectListItem("Aktif", "active", status == "active"),
+        new SelectListItem("Pasif", "passive", status == "passive")
+    };
+}
+
+<main class="page-content-area">
+
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Deneyimlerim</h1>
+            <p class="page-subtitle">Pasif deneyimler sitede gösterilmez.</p>
+        </div>
+        <div class="header-actions">
+            <a href="/Admin/Experience/CreateExperience" class="btn-pastel-primary">
+                <i class="bi bi-plus-circle-fill"></i>
+                <span>Yeni Deneyim</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-icon-wrapper icon-green"><i class="bi bi-briefcase"></i></div>
+            <div class="stat-content">
+                <span class="stat-label">Toplam Deneyim</span>
+                <h3 class="stat-value">@ViewBag.TotalCount</h3>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon-wrapper icon-blue"><i class="bi bi-check2-circle"></i></div>
+            <div class="stat-content">
+                <span class="stat-label">Aktif</span>
+                <h3 class="stat-value">@ViewBag.ActiveCount</h3>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon-wrapper icon-beige"><i class="bi bi-pause-circle"></i></div>
+            <div class="stat-content">
+                <span class="stat-label">Pasif</span>
+                <h3 class="stat-value">@ViewBag.PassiveCount</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="data-table-card">
+        <form method="get" class="table-filter-bar">
+            <div class="filters-left-group">
+                <div class="filter-search-box">
+                    <i class="bi bi-search"></i>
+                    <input type="text" name="search" value="@ViewBag.Search" placeholder="Başlık veya şirket ara...">
+                </div>
+                <select name="status" class="filter-select" asp-items="statusItems" onchange="this.form.submit()"></select>
+            </div>
+            <div class="filters-right-group">
+                <button type="submit" class="btn-table-util"><i class="bi bi-funnel"></i> <span class="d-none d-md-inline">Filtrele</span></button>
+                <a href="/Admin/Experience/ExperienceList" class="btn-table-util text-decoration-none"><i class="bi bi-arrow-counterclockwise"></i> <span class="d-none d-md-inline">Temizle</span></a>
+            </div>
+        </form>
+
+        <div class="table-responsive-wrapper">
+            <table class="custom-admin-table">
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">ID</th>
+                        <th>Deneyim Başlığı</th>
+                        <th>Kurum / Şirket</th>
+                        <th>Çalışma Türü</th>
+                        <th>Durum</th>
+                        <th style="text-align: right; width: 150px;">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr><td colspan="6" class="empty-state">Kayıt bulunamadı.</td></tr>
+                    }
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="col-id">#@item.ExperienceId</td>
+                            <td>
+                                <span class="exp-title-text">@item.Title</span>
+                                <small class="text-muted d-block" style="font-size:0.75rem;">@(item.Description.Length > 70 ? item.Description.Substring(0, 70) + "..." : item.Description)</small>
+                            </td>
+                            <td>
+                                <div class="company-cell">
+                                    <i class="bi bi-building company-badge-icon"></i>
+                                    <span>@item.CompanyName</span>
+                                </div>
+                            </td>
+                            <td><span class="work-type-badge">@(item.CategoryName ?? "-")</span></td>
+                            <td>
+                                <a href="/Admin/Experience/ToggleExperienceStatus/@item.ExperienceId" class="text-decoration-none" title="Durumu değiştir">
+                                    <span class="status-pill @(item.IsActive ? "status-active" : "status-passive")">@(item.IsActive ? "Aktif" : "Pasif")</span>
+                                </a>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="row-actions-group justify-content-end">
+                                    <a href="/Admin/Experience/UpdateExperience/@item.ExperienceId" class="btn-action-icon btn-edit" title="Güncelle">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <a href="/Admin/Experience/DeleteExperience/@item.ExperienceId" class="btn-action-icon btn-delete js-confirm-delete" title="Sil">
+                                        <i class="bi bi-trash3"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>

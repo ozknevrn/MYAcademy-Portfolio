@@ -1,0 +1,61 @@
+@model List<Education>
+
+<section id="education" class="bg-white border-top border-bottom">
+    <div class="container">
+        <div class="row gy-5">
+            <!-- Left: Timeline -->
+            <div class="col-lg-7 reveal-on-scroll">
+                <div class="eyebrow-badge">
+                    <i class="bi bi-mortarboard-fill"></i> AKADEMİK YOLCULUK
+                </div>
+                <h2 class="section-title mb-4">
+                    Eğitim Hayatım
+                </h2>
+
+                <div class="d-flex flex-column gap-4">
+                    @if (!Model.Any())
+                    {
+                        <p class="text-muted">Eğitim bilgileri yakında eklenecek.</p>
+                    }
+                    @foreach (var item in Model)
+                    {
+                        <div class="p-4 rounded-4 border bg-light">
+                            <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                                <h3 class="h5 fw-bold mb-0">@item.Title</h3>
+                                @if (!string.IsNullOrWhiteSpace(item.BadgeText))
+                                {
+                                    <span class="badge bg-secondary-subtle text-dark">@item.BadgeText</span>
+                                }
+                            </div>
+                            @if (!string.IsNullOrWhiteSpace(item.SchoolName))
+                            {
+                                <div class="text-muted fw-semibold small mb-2 font-heading">
+                                    @item.SchoolName
+                                </div>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(item.Description))
+                            {
+                                <p class="text-muted small mb-0">
+                                    @item.Description
+                                </p>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Right: Learning Philosophy Quote -->
+            <div class="col-lg-5 ps-lg-4 d-flex align-items-center reveal-on-scroll">
+                <div class="p-4 p-md-5 rounded-4 border w-100" style="background-color: var(--bg-primary);">
+                    <i class="bi bi-quote fs-1 text-muted opacity-50"></i>
+                    <blockquote class="fs-4 fw-bold font-heading my-3 text-dark">
+                        "Öğrenmek bir varış noktası değil, sürekli devam eden bir yolculuktur."
+                    </blockquote>
+                    <p class="text-muted small mb-0 lh-lg">
+                        Yazılım dünyasındaki hızlı dönüşüm; sürekli araştırmayı, yeni paradigmaları benimsemeyi ve edinilen bilgi birikimini paylaşmayı gerektirir.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

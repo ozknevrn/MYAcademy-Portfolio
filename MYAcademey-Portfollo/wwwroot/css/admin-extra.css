@@ -1,0 +1,227 @@
+/* Portfolyo Case kapsamında admin paneline eklenen ek stiller */
+
+/* Form kartı */
+.form-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.6rem;
+    box-shadow: var(--shadow-subtle);
+    max-width: 860px;
+}
+
+.form-card .form-group-custom {
+    margin-bottom: 1.1rem;
+}
+
+.form-card textarea.form-control-custom {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.field-error,
+.field-validation-error {
+    display: block;
+    color: #B55454;
+    font-size: 0.78rem;
+    margin-top: 4px;
+}
+
+.input-validation-error {
+    border-color: #E3A3A3 !important;
+    background-color: #FFF8F8 !important;
+}
+
+.form-hint {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    margin-top: 0.5rem;
+}
+
+/* Görsel önizleme */
+.image-preview {
+    width: 160px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    margin-top: 8px;
+}
+
+.table-thumb {
+    width: 52px;
+    height: 38px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+}
+
+.table-thumb-empty {
+    width: 52px;
+    height: 38px;
+    border-radius: 6px;
+    border: 1px dashed var(--border-color);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+}
+
+/* Okunmamış mesaj satırı */
+.custom-admin-table tbody tr.row-unread td {
+    background-color: #F6FAF7;
+    font-weight: 600;
+}
+
+.custom-admin-table tbody tr.row-unread td:first-child {
+    box-shadow: inset 3px 0 0 var(--accent-primary);
+}
+
+.unread-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #6AA27B;
+    margin-right: 6px;
+}
+
+/* Yetenek seviyesi çubuğu */
+.level-bar {
+    height: 8px;
+    background-color: #F0EDE7;
+    border-radius: 10px;
+    overflow: hidden;
+    min-width: 120px;
+}
+
+.level-bar > span {
+    display: block;
+    height: 100%;
+    background-color: var(--accent-primary);
+    border-radius: 10px;
+}
+
+.skill-group-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-subtle);
+    margin-bottom: 1.4rem;
+    overflow: hidden;
+}
+
+.skill-group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 1rem 1.3rem;
+    border-bottom: 1px solid var(--border-color);
+    flex-wrap: wrap;
+}
+
+.skill-group-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: var(--accent-pastel-green);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: #3B7A57;
+}
+
+/* Boş liste */
+.empty-state {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    color: var(--text-secondary);
+}
+
+.empty-state i {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 8px;
+    opacity: 0.6;
+}
+
+/* Dashboard */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 14px;
+    margin-bottom: 1.6rem;
+}
+
+.dashboard-grid .stat-card {
+    padding: 1rem;
+}
+
+.dashboard-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-subtle);
+    padding: 1.3rem;
+    height: 100%;
+}
+
+.dashboard-panel h5 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.quick-link-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: var(--text-primary);
+    background-color: #FFFFFF;
+    transition: all 0.15s ease;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.quick-link-card:hover {
+    background-color: var(--accent-pastel-green);
+    color: #3B7A57;
+}
+
+/* Mesaj modalı */
+.message-detail-meta {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.message-detail-body {
+    white-space: pre-wrap;
+    background-color: #FAF9F6;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+/* Sidebar sayaç */
+.sidebar-link .badge-count.badge-unread {
+    background-color: #B55454;
+    color: #FFFFFF;
+}
+a.stat-card { color: inherit; }
+a.stat-card:hover { border-color: #D6D0C4; }

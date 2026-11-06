@@ -1,0 +1,119 @@
+@{
+    var contact = ViewBag.Contact as Contact;
+    var socialMedias = ViewBag.SocialMedias as List<SocialMedia> ?? new List<SocialMedia>();
+}
+
+<section id="contact">
+    <div class="container">
+        <div class="row gy-5">
+            <!-- Left Column: Contact Info (admin panelinden yönetilir) -->
+            <div class="col-lg-5 reveal-on-scroll">
+                <div class="eyebrow-badge">
+                    <i class="bi bi-envelope-paper-fill"></i> İLETİŞİME GEÇELİM
+                </div>
+                <h2 class="section-title">
+                    @(contact?.Title ?? "Harika Bir Fikrin mi Var? Birlikte Hayata Geçirelim.")
+                </h2>
+                <p class="text-muted mb-4 fs-6">
+                    @(contact?.Description ?? "Yeni projeler, iş birlikleri veya yalnızca teknoloji üzerine sohbet etmek için benimle iletişime geçebilirsin.")
+                </p>
+
+                <div class="d-flex flex-column gap-3 mb-4">
+                    @if (!string.IsNullOrWhiteSpace(contact?.Email))
+                    {
+                        <div class="d-flex align-items-center gap-3 p-3 bg-white border rounded-3 shadow-sm">
+                            <div class="skill-icon-box mb-0" style="width: 44px; height: 44px; background: var(--bg-secondary);">
+                                <i class="bi bi-envelope"></i>
+                            </div>
+                            <div>
+                                <div class="text-muted small">E-posta</div>
+                                <a href="mailto:@contact.Email" class="fw-semibold text-decoration-none text-dark">@contact.Email</a>
+                            </div>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(contact?.PhoneNumber))
+                    {
+                        <div class="d-flex align-items-center gap-3 p-3 bg-white border rounded-3 shadow-sm">
+                            <div class="skill-icon-box mb-0" style="width: 44px; height: 44px; background: var(--bg-secondary);">
+                                <i class="bi bi-telephone"></i>
+                            </div>
+                            <div>
+                                <div class="text-muted small">Telefon</div>
+                                <div class="fw-semibold">@contact.PhoneNumber</div>
+                            </div>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(contact?.Location))
+                    {
+                        <div class="d-flex align-items-center gap-3 p-3 bg-white border rounded-3 shadow-sm">
+                            <div class="skill-icon-box mb-0" style="width: 44px; height: 44px; background: var(--bg-secondary);">
+                                <i class="bi bi-geo-alt"></i>
+                            </div>
+                            <div>
+                                <div class="text-muted small">Konum</div>
+                                <div class="fw-semibold">@contact.Location</div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                @if (socialMedias.Any())
+                {
+                    <div class="pt-2">
+                        <div class="text-muted small font-heading fw-semibold mb-2">Sosyal Ağlar:</div>
+                        <div class="d-flex gap-2">
+                            @foreach (var item in socialMedias)
+                            {
+                                <a href="@item.Url" target="_blank" rel="noopener noreferrer" class="social-pill" title="@item.Platform">
+                                    <i class="@(string.IsNullOrWhiteSpace(item.IconClass) ? "bi bi-link-45deg" : item.IconClass)"></i>
+                                </a>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Right Column: Form. Mesaj veritabanına kaydedilir ve admin Gelen Kutusu'na düşer. -->
+            <div class="col-lg-7 ps-lg-5 reveal-on-scroll">
+                <div class="bg-white p-4 p-md-5 rounded-4 border shadow-sm">
+                    <form id="contactForm" method="post" asp-area="" asp-controller="Default" asp-action="SendMessage" novalidate>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="SenderName" class="form-label small fw-semibold">Adınız Soyadınız *</label>
+                                <input type="text" class="form-control form-control-custom" id="SenderName" name="SenderName" maxlength="100" placeholder="Örn: Ahmet Yılmaz">
+                                <div class="invalid-feedback" data-error-for="SenderName"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="SenderMail" class="form-label small fw-semibold">E-posta Adresiniz *</label>
+                                <input type="email" class="form-control form-control-custom" id="SenderMail" name="SenderMail" maxlength="100" placeholder="ad@ornek.com">
+                                <div class="invalid-feedback" data-error-for="SenderMail"></div>
+                            </div>
+                            <div class="col-12">
+                                <label for="Subject" class="form-label small fw-semibold">Konu *</label>
+                                <input type="text" class="form-control form-control-custom" id="Subject" name="Subject" maxlength="150" placeholder="Örn: Proje teklifi">
+                                <div class="invalid-feedback" data-error-for="Subject"></div>
+                            </div>
+                            <div class="col-12">
+                                <label for="MessageDetail" class="form-label small fw-semibold">Mesajınız *</label>
+                                <textarea class="form-control form-control-custom" id="MessageDetail" name="MessageDetail" rows="5" maxlength="3000" placeholder="Projeniz veya sorunuz hakkında detayları paylaşın..."></textarea>
+                                <div class="invalid-feedback" data-error-for="MessageDetail"></div>
+                            </div>
+                            <div class="col-12 pt-2">
+                                <button type="submit" class="btn-sage w-100 justify-content-center py-3 fs-6" id="contactSubmitBtn">
+                                    <i class="bi bi-send-fill"></i>
+                                    <span>Mesajımı Gönder</span>
+                                </button>
+                                <div id="formFeedback" class="mt-2 text-center small"></div>
+                                <div class="text-muted text-center small mt-3" style="font-size: 0.78rem;">
+                                    <i class="bi bi-shield-check me-1"></i> Gönderilen bilgiler gizlilik ilkeleri doğrultusunda korunmaktadır.
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

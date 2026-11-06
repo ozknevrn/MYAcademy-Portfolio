@@ -1,0 +1,59 @@
+@model List<SocialMedia>
+@{
+    ViewData["Title"] = "Sosyal Medya";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Sosyal Medya</h1>
+            <p class="page-subtitle">Bu bağlantılar sitede ana sayfa, iletişim bölümü ve footer'da gösterilir.</p>
+        </div>
+        <div class="header-actions">
+            <a href="/Admin/SocialMedia/CreateSocialMedia" class="btn-pastel-primary">
+                <i class="bi bi-plus-circle-fill"></i>
+                <span>Yeni Bağlantı</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="data-table-card">
+        <div class="table-responsive-wrapper">
+            <table class="custom-admin-table">
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">İkon</th>
+                        <th>Platform</th>
+                        <th>Bağlantı</th>
+                        <th style="text-align: right; width: 120px;">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr><td colspan="4" class="empty-state">Henüz bağlantı eklenmemiş.</td></tr>
+                    }
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td><span class="skill-group-icon"><i class="@(string.IsNullOrWhiteSpace(item.IconClass) ? "bi bi-link-45deg" : item.IconClass)"></i></span></td>
+                            <td class="fw-semibold">@item.Platform</td>
+                            <td><a href="@item.Url" target="_blank" rel="noopener noreferrer">@item.Url</a></td>
+                            <td style="text-align: right;">
+                                <div class="row-actions-group justify-content-end">
+                                    <a href="/Admin/SocialMedia/UpdateSocialMedia/@item.SocialMediaId" class="btn-action-icon btn-edit" title="Güncelle">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <a href="/Admin/SocialMedia/DeleteSocialMedia/@item.SocialMediaId" class="btn-action-icon btn-delete js-confirm-delete" title="Sil">
+                                        <i class="bi bi-trash3"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>

@@ -1,0 +1,35 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="tr">
+@await Component.InvokeAsync("_AdminLayoutHeadComponentPartial")
+
+<body>
+
+    <div class="admin-wrapper">
+
+        @await Component.InvokeAsync("_AdminLayoutSidebarComponentPartial")
+
+        <div class="admin-main">
+
+            @await Component.InvokeAsync("_AdminLayoutNavbarComponentPartial")
+
+            @RenderBody()
+
+        </div>
+
+    </div>
+
+    @* Controller'larda TempData ile gönderilen başarı / hata mesajları. Script tarafı bunları SweetAlert2 ile gösterir. *@
+    <div id="flashMessages"
+         data-success="@TempData["Success"]"
+         data-error="@TempData["Error"]"
+         hidden></div>
+
+    @await Component.InvokeAsync("_AdminLayoutScriptComponentPartial")
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

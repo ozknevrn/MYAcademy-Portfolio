@@ -1,0 +1,44 @@
+@model Skill
+@{
+    ViewData["Title"] = ViewBag.FormTitle;
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">@ViewBag.FormTitle</h1>
+            <p class="page-subtitle">Ör: "Backend Geliştirme" grubu, içinde C#, ASP.NET Core gibi yetenekler barındırır.</p>
+        </div>
+    </div>
+
+    <div class="form-card">
+        <form method="post">
+            <input type="hidden" asp-for="SkillId" />
+
+            <div class="form-group-custom">
+                <label asp-for="Title" class="form-label-custom">Grup Başlığı <span class="required-star">*</span></label>
+                <input asp-for="Title" class="form-control-custom" placeholder="Ör: Backend Geliştirme" />
+                <span asp-validation-for="Title" class="field-error"></span>
+            </div>
+
+            <div class="form-group-custom">
+                <label asp-for="Description" class="form-label-custom">Açıklama</label>
+                <textarea asp-for="Description" class="form-control-custom" rows="3" placeholder="Kısa açıklama"></textarea>
+                <span asp-validation-for="Description" class="field-error"></span>
+            </div>
+
+            <div class="form-group-custom">
+                <label asp-for="IconUrl" class="form-label-custom">İkon (Bootstrap Icons sınıfı)</label>
+                <input asp-for="IconUrl" class="form-control-custom" placeholder="Ör: bi bi-server" />
+                <div class="form-hint">İkon listesi: icons.getbootstrap.com — ör: bi bi-server, bi bi-database, bi bi-cpu</div>
+                <span asp-validation-for="IconUrl" class="field-error"></span>
+            </div>
+
+            <div class="form-actions">
+                <a href="/Admin/Skill/SkillList" class="btn-pastel-secondary">Vazgeç</a>
+                <button type="submit" class="btn-pastel-primary">Kaydet</button>
+            </div>
+        </form>
+    </div>
+</main>

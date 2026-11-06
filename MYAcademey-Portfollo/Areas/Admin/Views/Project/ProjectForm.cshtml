@@ -1,0 +1,73 @@
+@model Project
+@{
+    ViewData["Title"] = ViewBag.FormTitle;
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">@ViewBag.FormTitle</h1>
+            <p class="page-subtitle">Kategori listesi veritabanından gelir. Görsel en fazla 2 MB (.jpg, .png, .webp).</p>
+        </div>
+    </div>
+
+    <div class="form-card">
+        @* Dosya yüklemek için enctype="multipart/form-data" zorunludur *@
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="ProjectId" />
+
+            <div class="form-group-custom">
+                <label asp-for="ProjectTitle" class="form-label-custom">Proje Adı <span class="required-star">*</span></label>
+                <input asp-for="ProjectTitle" class="form-control-custom" placeholder="Ör: Yapay Zeka Destekli Seyahat Asistanı" />
+                <span asp-validation-for="ProjectTitle" class="field-error"></span>
+            </div>
+
+            <div class="form-group-custom">
+                <label asp-for="CategoryId" class="form-label-custom">Kategori <span class="required-star">*</span></label>
+                <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control-custom">
+                    <option value="0">-- Kategori seçiniz --</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="field-error"></span>
+                <div class="form-hint">Listede kategori yoksa önce <a href="/Admin/Category/CreateCategory">kategori ekleyin</a>.</div>
+            </div>
+
+            <div class="form-group-custom">
+                <label asp-for="Description" class="form-label-custom">Açıklama <span class="required-star">*</span></label>
+                <textarea asp-for="Description" class="form-control-custom" rows="4"></textarea>
+                <span asp-validation-for="Description" class="field-error"></span>
+            </div>
+
+            <div class="form-group-custom">
+                <label asp-for="Technologies" class="form-label-custom">Teknolojiler</label>
+                <input asp-for="Technologies" class="form-control-custom" placeholder="Virgülle ayırın: ASP.NET Core, EF Core, SQL Server" />
+                <span asp-validation-for="Technologies" class="field-error"></span>
+            </div>
+
+            <div class="form-group-custom">
+                <label class="form-label-custom" for="imageFile">Proje Görseli</label>
+                <input type="file" name="imageFile" id="imageFile" class="form-control-custom" accept=".jpg,.jpeg,.png,.webp" data-preview="#imagePreview" />
+                @Html.ValidationMessage("imageFile", null, new { @class = "field-error" })
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <div class="form-hint">Mevcut görsel (yeni görsel seçmezseniz bu kalır):</div>
+                    <img src="@Model.ImageUrl" id="imagePreview" class="image-preview" alt="Proje görseli" />
+                }
+                else
+                {
+                    <img id="imagePreview" class="image-preview d-none" alt="Önizleme" />
+                }
+            </div>
+
+            <div class="form-group-custom form-check form-switch">
+                <input asp-for="IsActive" class="form-check-input" role="switch" />
+                <label asp-for="IsActive" class="form-check-label">Aktif (sitede gösterilsin)</label>
+            </div>
+
+            <div class="form-actions">
+                <a href="/Admin/Project/ProjectList" class="btn-pastel-secondary">Vazgeç</a>
+                <button type="submit" class="btn-pastel-primary">Kaydet</button>
+            </div>
+        </form>
+    </div>
+</main>

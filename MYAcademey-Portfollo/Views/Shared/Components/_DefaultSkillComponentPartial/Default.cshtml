@@ -1,0 +1,53 @@
+@model List<Skill>
+
+<section id="skills">
+    <div class="container">
+        <div class="section-header text-center mx-auto reveal-on-scroll" style="max-width: 680px;">
+            <div class="eyebrow-badge">
+                <i class="bi bi-stack"></i> TEKNOLOJİ YIĞINIM
+            </div>
+            <h2 class="section-title">
+                Kullandığım Teknolojiler ve Uzmanlık Alanlarım
+            </h2>
+            <p class="section-description mx-auto">
+                Bir fikrin hayata geçirilmesinden ölçeklenebilir bir yazılım ürününe dönüşmesine kadar farklı teknolojilerle çalışıyorum.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            @if (!Model.Any())
+            {
+                <div class="col-12 text-center text-muted">Yetenekler yakında eklenecek.</div>
+            }
+            @foreach (var group in Model)
+            {
+                <div class="col-md-6 col-lg-4 reveal-on-scroll">
+                    <div class="skill-card h-100">
+                        <div class="skill-icon-box">
+                            <i class="@(string.IsNullOrWhiteSpace(group.IconUrl) ? "bi bi-stack" : group.IconUrl)"></i>
+                        </div>
+                        <h3 class="h5 fw-bold mb-3">@group.Title</h3>
+                        @if (!string.IsNullOrWhiteSpace(group.Description))
+                        {
+                            <p class="text-muted small mb-4">@group.Description</p>
+                        }
+
+                        @* Her yeteneğin 0-100 seviyesi ilerleme çubuğu olarak gösterilir *@
+                        @foreach (var item in (group.SkillItems ?? new List<SkillItem>()).OrderByDescending(x => x.Level))
+                        {
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between small mb-1">
+                                    <span class="fw-semibold">@item.SkillItemTitle</span>
+                                    <span class="text-muted">%@item.Level</span>
+                                </div>
+                                <div class="progress" style="height: 6px;" role="progressbar" aria-label="@item.SkillItemTitle" aria-valuenow="@item.Level" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar" style="width: @item.Level%; background-color: var(--accent-sage, #8FAE97);"></div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

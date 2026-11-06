@@ -1,0 +1,47 @@
+﻿@model List<Experience>
+
+<!-- 7. Professional Experience Section -->
+<section id="experience" class="bg-white border-top border-bottom">
+    <div class="container">
+        <div class="section-header text-center mx-auto reveal-on-scroll" style="max-width: 650px;">
+            <div class="eyebrow-badge eyebrow-badge-terracotta">
+                <i class="bi bi-briefcase-fill"></i> KARİYER YOLCULUĞUM
+            </div>
+            <h2 class="section-title">
+                Deneyimlerim ve Profesyonel Yolculuğum
+            </h2>
+            <p class="section-description mx-auto">
+                Yazılım geliştirme ve teknoloji alanlarındaki tecrübelerim.
+            </p>
+        </div>
+
+        <div class="timeline-container">
+            <div class="timeline-line"></div>
+            @if (!Model.Any())
+            {
+                <p class="text-center text-muted">Deneyimler yakında eklenecek.</p>
+            }
+            @foreach (var item in Model)
+            {
+                <div class="timeline-item reveal-on-scroll">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-card">
+                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
+                            <h3 class="h5 fw-bold mb-0">@item.Title</h3>
+                            @if (!string.IsNullOrWhiteSpace(item.CategoryName))
+                            {
+                                <span class="badge bg-success-subtle text-success-emphasis fw-medium px-3 py-2 rounded-pill">@item.CategoryName</span>
+                            }
+                        </div>
+                        <div class="text-muted fw-semibold small mb-3 font-heading">
+                            <i class="bi bi-building me-1"></i> @item.CompanyName
+                        </div>
+                        <p class="text-muted mb-0">
+                            @item.Description
+                        </p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

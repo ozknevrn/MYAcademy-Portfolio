@@ -1,0 +1,78 @@
+@model List<Project>
+@{
+    var categories = ViewBag.Categories as List<Category> ?? new List<Category>();
+    const string placeholderImage = "https://lh3.googleusercontent.com/aida-public/AB6AXuD1gZJs_U2YiOQIR5mnZfZQhk69l0J1t4KX1skTA1nf6ScbSR2jKax_uA0cjYpML1P329_5ob3neM5V6FA8UG-h5TVzdc-lG9TtWsrgwuUNRZYKyLPchpomRHp4KxTdXS-Q9aE698Qj3JKm_sujki7qvlEwyF6uVSEWbd99t86o8fF3p2kVXJ8-p4lsR-p0GFzkNNc0KRVhgQNx1bTY63Cc3VQiPHywioukY4cwSNcLnrBpzDGhlk23";
+}
+
+<section id="projects">
+    <div class="container">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-4 gap-3 reveal-on-scroll">
+            <div>
+                <div class="eyebrow-badge">
+                    <i class="bi bi-folder-check"></i> SEÇİLMİŞ ÇALIŞMALAR
+                </div>
+                <h2 class="section-title mb-1">
+                    Fikirden Ürüne Dönüşen Projeler
+                </h2>
+                <p class="section-description mb-0">
+                    En yeni projelerim en başta. Kategoriye göre filtreleyebilirsiniz.
+                </p>
+            </div>
+
+            @* Filtre butonları veritabanındaki kategorilerden oluşur *@
+            @if (categories.Count > 1)
+            {
+                <div class="d-flex flex-wrap gap-2" id="projectFilters">
+                    <button class="filter-btn active" data-filter="all">Tümü</button>
+                    @foreach (var category in categories)
+                    {
+                        <button class="filter-btn" data-filter="cat-@category.CategoryId">@category.CategoryName</button>
+                    }
+                </div>
+            }
+        </div>
+
+        <div class="row g-4" id="projectGrid">
+            @if (!Model.Any())
+            {
+                <div class="col-12 text-center text-muted">Projeler yakında eklenecek.</div>
+            }
+            @foreach (var item in Model)
+            {
+                var technologies = (item.Technologies ?? "")
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+                <div class="col-lg-6 project-item reveal-on-scroll" data-category="cat-@item.CategoryId">
+                    <div class="project-card">
+                        <div class="project-thumb-wrap">
+                            <img src="@(string.IsNullOrWhiteSpace(item.ImageUrl) ? placeholderImage : item.ImageUrl)" alt="@item.ProjectTitle" class="project-thumb-img">
+                            <span class="project-category-tag">@(item.Category?.CategoryName)</span>
+                        </div>
+                        <div class="project-body">
+                            <h3 class="h4 fw-bold mb-2">@item.ProjectTitle</h3>
+                            <p class="text-muted small mb-4 flex-grow-1">
+                                @item.Description
+                            </p>
+                            @if (technologies.Any())
+                            {
+                                <div class="mb-4">
+                                    @foreach (var tech in technologies)
+                                    {
+                                        <span class="tech-badge">@tech</span>
+                                    }
+                                </div>
+                            }
+                            <div class="d-flex align-items-center justify-content-between pt-3 border-top">
+                                <a href="#contact" class="btn-sage btn-sm">
+                                    <span>Bu Proje Hakkında Yaz</span>
+                                    <i class="bi bi-arrow-up-right"></i>
+                                </a>
+                                <span class="text-muted small"><i class="bi bi-calendar2 me-1"></i>@item.CreatedDate.ToString("MMMM yyyy")</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

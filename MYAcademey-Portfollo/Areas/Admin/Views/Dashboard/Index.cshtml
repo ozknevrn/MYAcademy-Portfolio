@@ -1,0 +1,214 @@
+﻿@model DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+    int maxCategoryCount = Model.CategorySummaries.Any() ? Model.CategorySummaries.Max(x => x.ProjectCount) : 0;
+}
+
+<main class="page-content-area">
+
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Hoş geldin, Özkan 👋</h1>
+            <p class="page-subtitle">Portfolyonun güncel özeti. Tüm veriler veritabanından anlık olarak gelir.</p>
+        </div>
+        <div class="header-actions">
+            <a href="/" target="_blank" class="btn-pastel-secondary">
+                <i class="bi bi-box-arrow-up-right"></i>
+                <span>Siteyi Önizle</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- İstatistik kartları -->
+    <div class="dashboard-grid">
+        <div class="stat-card">
+            <div class="stat-icon-wrapper icon-green"><i class="bi bi-folder2-open"></i></div>
+            <div class="stat-content">
+                <span class="stat-label">Toplam Proje</span>
+                <h3 class="stat-value">@Model.TotalProjectCount</h3>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon-wrapper icon-blue"><i class="bi bi-check2-circle"></i></div>
+            <div class="stat-content">
+                <span class="stat-label">Aktif Proje</span>
+                <h3 class="stat-value">@Model.ActiveProjectCount</h3>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon-wrapper icon-purple"><i class="bi bi-stars"></i></div>
+            <div class="stat-content">
+                <span class="stat-label">Yetenek</span>
+                <h3 class="stat-value">@Model.SkillCount</h3>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon-wrapper icon-beige"><i class="bi bi-briefcase"></i></div>
+            <div class="stat-content">
+                <span class="stat-label">Deneyim</span>
+                <h3 class="stat-value">@Model.ExperienceCount</h3>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon-wrapper icon-green"><i class="bi bi-mortarboard"></i></div>
+            <div class="stat-content">
+                <span class="stat-label">Eğitim</span>
+                <h3 class="stat-value">@Model.EducationCount</h3>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon-wrapper icon-blue"><i class="bi bi-inbox"></i></div>
+            <div class="stat-content">
+                <span class="stat-label">Toplam Mesaj</span>
+                <h3 class="stat-value">@Model.TotalMessageCount</h3>
+            </div>
+        </div>
+        <a href="/Admin/Message/MessageList?status=unread" class="stat-card text-decoration-none">
+            <div class="stat-icon-wrapper icon-purple"><i class="bi bi-envelope-exclamation"></i></div>
+            <div class="stat-content">
+                <span class="stat-label">Okunmamış Mesaj</span>
+                <h3 class="stat-value">@Model.UnreadMessageCount</h3>
+            </div>
+        </a>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <!-- Son 5 mesaj -->
+        <div class="col-xl-7">
+            <div class="dashboard-panel">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="mb-0">Son Mesajlar</h5>
+                    <a href="/Admin/Message/MessageList" class="small">Tümünü gör</a>
+                </div>
+                <table class="custom-admin-table">
+                    <thead>
+                        <tr>
+                            <th>Gönderen</th>
+                            <th>Konu</th>
+                            <th>Tarih</th>
+                            <th>Durum</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.LastMessages.Any())
+                        {
+                            <tr><td colspan="4" class="empty-state">Henüz mesaj yok.</td></tr>
+                        }
+                        @foreach (var item in Model.LastMessages)
+                        {
+                            <tr class="@(item.IsRead ? "" : "row-unread")">
+                                <td>@item.SenderName</td>
+                                <td><a href="/Admin/Message/MessageList?search=@Uri.EscapeDataString(item.Subject)" class="text-decoration-none">@item.Subject</a></td>
+                                <td><small>@item.SendDate.ToString("dd MMM HH:mm")</small></td>
+                                <td><span class="status-pill @(item.IsRead ? "status-active" : "status-passive")">@(item.IsRead ? "Okundu" : "Okunmadı")</span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Kategori özeti (GroupBy) -->
+        <div class="col-xl-5">
+            <div class="dashboard-panel">
+                <h5>Kategorilere Göre Projeler</h5>
+                @if (!Model.CategorySummaries.Any())
+                {
+                    <div class="empty-state">Henüz kategori yok.</div>
+                }
+                else
+                {
+                    <canvas id="categoryChart" height="180"></canvas>
+                    <table class="custom-admin-table mt-3">
+                        <tbody>
+                            @foreach (var item in Model.CategorySummaries)
+                            {
+                                var percent = maxCategoryCount == 0 ? 0 : item.ProjectCount * 100 / maxCategoryCount;
+                                <tr>
+                                    <td>@item.CategoryName</td>
+                                    <td style="width: 45%;"><div class="level-bar"><span style="width: @percent%;"></span></div></td>
+                                    <td style="text-align: right;"><span class="order-badge">@item.ProjectCount</span></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Son eklenen 3 proje -->
+        <div class="col-xl-7">
+            <div class="dashboard-panel">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="mb-0">Son Eklenen Projeler</h5>
+                    <a href="/Admin/Project/ProjectList" class="small">Tümünü gör</a>
+                </div>
+                <table class="custom-admin-table">
+                    <tbody>
+                        @if (!Model.LastProjects.Any())
+                        {
+                            <tr><td class="empty-state">Henüz proje yok.</td></tr>
+                        }
+                        @foreach (var item in Model.LastProjects)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="/Admin/Project/UpdateProject/@item.ProjectId" class="exp-title-text text-decoration-none">@item.ProjectTitle</a>
+                                    <small class="text-muted d-block">@item.CreatedDate.ToString("dd MMM yyyy")</small>
+                                </td>
+                                <td><span class="work-type-badge">@(item.Category?.CategoryName ?? "-")</span></td>
+                                <td style="text-align: right;"><span class="status-pill @(item.IsActive ? "status-active" : "status-passive")">@(item.IsActive ? "Aktif" : "Pasif")</span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Hızlı erişim -->
+        <div class="col-xl-5">
+            <div class="dashboard-panel">
+                <h5>Hızlı Erişim</h5>
+                <div class="d-grid gap-2">
+                    <a href="/Admin/Project/CreateProject" class="quick-link-card"><i class="bi bi-plus-circle"></i> Yeni Proje Ekle</a>
+                    <a href="/Admin/Message/MessageList?status=unread" class="quick-link-card"><i class="bi bi-envelope-open"></i> Okunmamış Mesajları Gör (@Model.UnreadMessageCount)</a>
+                    <a href="/Admin/Skill/CreateSkillItem" class="quick-link-card"><i class="bi bi-stars"></i> Yeni Yetenek Ekle</a>
+                    <a href="/Admin/HeroSection/UpdateHeroSection" class="quick-link-card"><i class="bi bi-house"></i> Ana Sayfa Bilgilerini Düzenle</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Scripts {
+    @if (Model.CategorySummaries.Any())
+    {
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+        <script>
+            (function () {
+                const labels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CategorySummaries.Select(x => x.CategoryName)));
+                const values = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CategorySummaries.Select(x => x.ProjectCount)));
+
+                new Chart(document.getElementById('categoryChart'), {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Proje sayısı',
+                            data: values,
+                            backgroundColor: '#9BB7A2',
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        plugins: { legend: { display: false } },
+                        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+                    }
+                });
+            })();
+        </script>
+    }
+}

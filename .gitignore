@@ -1,0 +1,9 @@
+## Visual Studio / .NET
+.vs/
+bin/
+obj/
+*.user
+*.suo
+
+## Kullanıcıların yüklediği görseller
+**/wwwroot/uploads/

@@ -1,0 +1,103 @@
+﻿@model HeroSection?
+@{
+    var heroTitles = ViewBag.HeroTitles as List<string> ?? new List<string>();
+    var socialMedias = ViewBag.SocialMedias as List<SocialMedia> ?? new List<SocialMedia>();
+    var imageUrl = string.IsNullOrWhiteSpace(Model?.MainImageUrl)
+        ? "https://lh3.googleusercontent.com/aida-public/AB6AXuBOoGFL_RUXVi18KeTYZHtpMvWTtuGQlha2lSBEJIb3UBD2AHmHUMcwWkQuBFy2Ih2G3UQdItXjfmoP7gBHBbjDYT0TyYqrhY0j_ZslJZF6gFDTY3UEE3z56G-mss_yPIXrKHzkT6NmYtiU0oNmOWhuVL11uNPnRc-VMnSg-ZRgxS00UWdSipCRY2Dwo_lCXz0hBr0-rvvqSsoFJDYHrmyVLWyIbSRsdGcs24JgjX_388FLX_3wUEy8"
+        : Model!.MainImageUrl;
+}
+
+<section id="home">
+    <div class="container">
+        <div class="row align-items-center gy-5">
+            <!-- Left Column -->
+            <div class="col-lg-7 reveal-on-scroll is-revealed">
+                <div class="eyebrow-badge">
+                    <i class="bi bi-hand-wave-fill"></i> @(Model?.Greeting)
+                </div>
+
+                <h1 class="hero-title">
+                    @(Model?.Title)
+                </h1>
+
+                @* Unvanlar admin panelinden (HeroTitle) gelir; JavaScript data-phrases içinden okur *@
+                <div class="typewriter-wrapper">
+                    <span id="typewriterText" data-phrases="@System.Text.Json.JsonSerializer.Serialize(heroTitles)"></span><span class="typing-cursor"></span>
+                </div>
+
+                <p class="hero-lead">
+                    @(Model?.Description)
+                </p>
+
+                <div class="d-flex flex-wrap align-items-center gap-3 mb-4">
+                    <a href="#projects" class="btn-sage">
+                        <span>Projelerimi Keşfet</span>
+                        <i class="bi bi-arrow-down-right"></i>
+                    </a>
+                    <a href="#contact" class="btn-secondary-custom">
+                        <span>Benimle İletişime Geç</span>
+                        <i class="bi bi-chat-text"></i>
+                    </a>
+                </div>
+
+                @if (socialMedias.Any())
+                {
+                    <div class="d-flex align-items-center gap-2 pt-2">
+                        <span class="text-muted small me-2 font-heading fw-semibold">Takip Et:</span>
+                        @foreach (var item in socialMedias)
+                        {
+                            <a href="@item.Url" target="_blank" rel="noopener noreferrer" class="social-pill" title="@item.Platform">
+                                <i class="@(string.IsNullOrWhiteSpace(item.IconClass) ? "bi bi-link-45deg" : item.IconClass)"></i>
+                            </a>
+                        }
+                    </div>
+                }
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-lg-5 reveal-on-scroll is-revealed">
+                <div class="position-relative mx-auto" style="max-width: 440px;">
+                    <div class="hero-portrait-frame">
+                        <img src="@imageUrl" alt="@(Model?.Greeting)" class="hero-portrait-img">
+                    </div>
+
+                    @if (!string.IsNullOrWhiteSpace(Model?.ExperienceYear))
+                    {
+                        <div class="floating-badge floating-badge-bottom">
+                            <div class="skill-icon-box mb-0" style="width: 42px; height: 42px; background: var(--accent-sage-soft); color: var(--accent-sage-dark);">
+                                <i class="bi bi-award-fill"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold font-heading fs-6">@Model.ExperienceYear Yıllık</div>
+                                <div class="text-muted small">Yazılım Deneyimi</div>
+                            </div>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model?.StudentCount))
+                    {
+                        <div class="floating-badge floating-badge-top d-none d-sm-flex">
+                            <div class="skill-icon-box mb-0" style="width: 38px; height: 38px; background: var(--accent-terracotta-soft); color: var(--accent-terracotta);">
+                                <i class="bi bi-people-fill"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold font-heading small">@Model.StudentCount Öğrenci</div>
+                                <div class="text-muted" style="font-size: 0.72rem;">Online Topluluk</div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="text-center mt-5 pt-4">
+            <a href="#about" class="scroll-indicator">
+                <div class="scroll-mouse">
+                    <div class="scroll-dot"></div>
+                </div>
+                <span>Aşağı Kaydır</span>
+            </a>
+        </div>
+    </div>
+</section>

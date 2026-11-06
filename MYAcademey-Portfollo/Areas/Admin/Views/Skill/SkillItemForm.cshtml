@@ -1,0 +1,46 @@
+@model SkillItem
+@{
+    ViewData["Title"] = ViewBag.FormTitle;
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">@ViewBag.FormTitle</h1>
+            <p class="page-subtitle">Yeteneğin hangi gruba ait olduğunu seçin ve 0-100 arası bir seviye verin.</p>
+        </div>
+    </div>
+
+    <div class="form-card">
+        <form method="post">
+            <input type="hidden" asp-for="SkillItemId" />
+
+            <div class="form-group-custom">
+                <label asp-for="SkillId" class="form-label-custom">Yetenek Grubu <span class="required-star">*</span></label>
+                <select asp-for="SkillId" asp-items="ViewBag.Skills" class="form-control-custom">
+                    <option value="0">-- Grup seçiniz --</option>
+                </select>
+                <span asp-validation-for="SkillId" class="field-error"></span>
+            </div>
+
+            <div class="form-group-custom">
+                <label asp-for="SkillItemTitle" class="form-label-custom">Yetenek Adı <span class="required-star">*</span></label>
+                <input asp-for="SkillItemTitle" class="form-control-custom" placeholder="Ör: C#" />
+                <span asp-validation-for="SkillItemTitle" class="field-error"></span>
+            </div>
+
+            <div class="form-group-custom">
+                <label asp-for="Level" class="form-label-custom">Seviye (0-100): <strong id="levelValue">@Model.Level</strong></label>
+                <input asp-for="Level" type="range" min="0" max="100" step="5" class="form-range"
+                       oninput="document.getElementById('levelValue').innerText = this.value" />
+                <span asp-validation-for="Level" class="field-error"></span>
+            </div>
+
+            <div class="form-actions">
+                <a href="/Admin/Skill/SkillList" class="btn-pastel-secondary">Vazgeç</a>
+                <button type="submit" class="btn-pastel-primary">Kaydet</button>
+            </div>
+        </form>
+    </div>
+</main>

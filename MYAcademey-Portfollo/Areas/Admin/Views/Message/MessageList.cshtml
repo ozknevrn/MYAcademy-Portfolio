@@ -1,0 +1,209 @@
+﻿@model List<Message>
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Gelen Mesajlar";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+    string status = ViewBag.Status ?? "";
+    var statusItems = new List<SelectListItem>
+    {
+        new SelectListItem("Tüm Mesajlar", "", status == ""),
+        new SelectListItem("Okunmamış", "unread", status == "unread"),
+        new SelectListItem("Okunmuş", "read", status == "read")
+    };
+}
+
+<main class="page-content-area">
+
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Gelen Mesajlar</h1>
+            <p class="page-subtitle">Mesajı açmak için satıra tıklayın. Açılan mesaj otomatik olarak okundu sayılır.</p>
+        </div>
+        <div class="header-actions">
+            <a href="/Admin/Message/MarkAllAsRead" class="btn-pastel-secondary">
+                <i class="bi bi-check2-all"></i>
+                <span>Tümünü Okundu Yap</span>
+            </a>
+            <a href="/Admin/Message/CreateMessage" class="btn-pastel-secondary">
+                <i class="bi bi-plus-lg"></i>
+                <span>Test Mesajı</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-icon-wrapper icon-green"><i class="bi bi-inbox"></i></div>
+            <div class="stat-content">
+                <span class="stat-label">Toplam Mesaj</span>
+                <h3 class="stat-value">@ViewBag.TotalCount</h3>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon-wrapper icon-purple"><i class="bi bi-envelope-exclamation"></i></div>
+            <div class="stat-content">
+                <span class="stat-label">Okunmamış</span>
+                <h3 class="stat-value" id="unreadCountValue">@ViewBag.UnreadCount</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="data-table-card">
+        <form method="get" class="table-filter-bar">
+            <div class="filters-left-group">
+                <div class="filter-search-box">
+                    <i class="bi bi-search"></i>
+                    <input type="text" name="search" value="@ViewBag.Search" placeholder="Gönderen veya konu ara...">
+                </div>
+                <select name="status" class="filter-select" asp-items="statusItems" onchange="this.form.submit()"></select>
+            </div>
+            <div class="filters-right-group">
+                <button type="submit" class="btn-table-util"><i class="bi bi-funnel"></i> <span class="d-none d-md-inline">Ara</span></button>
+                <a href="/Admin/Message/MessageList" class="btn-table-util text-decoration-none"><i class="bi bi-arrow-counterclockwise"></i> <span class="d-none d-md-inline">Temizle</span></a>
+            </div>
+        </form>
+
+        <div class="table-responsive-wrapper">
+            <table class="custom-admin-table">
+                <thead>
+                    <tr>
+                        <th>Gönderen</th>
+                        <th>Konu</th>
+                        <th>Tarih</th>
+                        <th>Durum</th>
+                        <th style="text-align: right; width: 150px;">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr><td colspan="5" class="empty-state">Mesaj bulunamadı.</td></tr>
+                    }
+                    @foreach (var item in Model)
+                    {
+                        <tr id="message-row-@item.MessageId" class="@(item.IsRead ? "" : "row-unread")">
+                            <td>
+                                @if (!item.IsRead)
+                                {
+                                    <span class="unread-dot" title="Okunmadı"></span>
+                                }
+                                @item.SenderName
+                                <small class="text-muted d-block" style="font-size:0.75rem; font-weight: 400;">@item.SenderMail</small>
+                            </td>
+                            <td>@item.Subject</td>
+                            <td><span class="date-badge"><i class="bi bi-clock"></i> @item.SendDate.ToString("dd MMM yyyy HH:mm")</span></td>
+                            <td class="status-cell">
+                                <span class="status-pill @(item.IsRead ? "status-active" : "status-passive")">@(item.IsRead ? "Okundu" : "Okunmadı")</span>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="row-actions-group justify-content-end">
+                                    <button type="button" class="btn-action-icon btn-view js-open-message" data-id="@item.MessageId" title="Mesajı aç">
+                                        <i class="bi bi-envelope-open"></i>
+                                    </button>
+                                    <a href="/Admin/Message/ToggleReadStatus/@item.MessageId" class="btn-action-icon btn-edit" title="@(item.IsRead ? "Okunmadı yap" : "Okundu yap")">
+                                        <i class="bi @(item.IsRead ? "bi-envelope" : "bi-envelope-check")"></i>
+                                    </a>
+                                    <a href="/Admin/Message/DeleteMessage/@item.MessageId" class="btn-action-icon btn-delete js-confirm-delete"
+                                       data-text="@item.SenderName adlı kişinin mesajı silinecek." title="Sil">
+                                        <i class="bi bi-trash3"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<!-- Mesaj detayı modalı (Bootstrap Modal) -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="messageModalTitle">Mesaj</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body">
+                <div id="messageModalLoading" class="text-center text-muted py-4">Yükleniyor...</div>
+                <div id="messageModalContent" class="d-none">
+                    <div class="message-detail-meta">
+                        <div><strong>Gönderen:</strong> <span id="mdSender"></span> &lt;<a id="mdMail" href="#"></a>&gt;</div>
+                        <div><strong>Tarih:</strong> <span id="mdDate"></span></div>
+                    </div>
+                    <div class="message-detail-body" id="mdBody"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a id="mdReply" href="#" class="btn-pastel-primary"><i class="bi bi-reply"></i> E-posta ile Yanıtla</a>
+                <button type="button" class="btn-pastel-secondary" data-bs-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const modalElement = document.getElementById('messageModal');
+            const modal = new bootstrap.Modal(modalElement);
+
+            document.querySelectorAll('.js-open-message').forEach(function (button) {
+                button.addEventListener('click', function () {
+                    openMessage(button.dataset.id);
+                });
+            });
+
+            async function openMessage(id) {
+                document.getElementById('messageModalLoading').classList.remove('d-none');
+                document.getElementById('messageModalContent').classList.add('d-none');
+                document.getElementById('messageModalTitle').innerText = 'Mesaj';
+                modal.show();
+
+                try {
+                    const response = await fetch('/Admin/Message/GetMessageDetail/' + id);
+                    if (!response.ok) throw new Error();
+                    const data = await response.json();
+
+                    // textContent kullanılır; mesaj içindeki HTML çalıştırılmaz (XSS koruması)
+                    document.getElementById('messageModalTitle').textContent = data.subject;
+                    document.getElementById('mdSender').textContent = data.senderName;
+                    document.getElementById('mdMail').textContent = data.senderMail;
+                    document.getElementById('mdMail').href = 'mailto:' + data.senderMail;
+                    document.getElementById('mdDate').textContent = data.sendDate;
+                    document.getElementById('mdBody').textContent = data.messageDetail;
+                    document.getElementById('mdReply').href = 'mailto:' + data.senderMail + '?subject=' + encodeURIComponent('Re: ' + data.subject);
+
+                    document.getElementById('messageModalLoading').classList.add('d-none');
+                    document.getElementById('messageModalContent').classList.remove('d-none');
+
+                    markRowAsRead(id, data.unreadCount);
+                } catch (e) {
+                    document.getElementById('messageModalLoading').textContent = 'Mesaj yüklenemedi.';
+                }
+            }
+
+            // Sayfa yenilenmeden satırın görünümünü "okundu" yapar ve sayaçları günceller
+            function markRowAsRead(id, unreadCount) {
+                const row = document.getElementById('message-row-' + id);
+                if (row) {
+                    row.classList.remove('row-unread');
+                    const dot = row.querySelector('.unread-dot');
+                    if (dot) dot.remove();
+                    const cell = row.querySelector('.status-cell');
+                    if (cell) cell.innerHTML = '<span class="status-pill status-active">Okundu</span>';
+                }
+
+                const counter = document.getElementById('unreadCountValue');
+                if (counter) counter.textContent = unreadCount;
+
+                const badge = document.querySelector('.badge-unread');
+                if (badge) {
+                    if (unreadCount > 0) badge.textContent = unreadCount;
+                    else badge.remove();
+                }
+            }
+        })();
+    </script>
+}

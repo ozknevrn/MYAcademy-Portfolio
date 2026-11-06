@@ -1,0 +1,64 @@
+﻿@model List<Category>
+@{
+    ViewData["Title"] = "Kategoriler";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Proje Kategorileri</h1>
+            <p class="page-subtitle">Projeler bu kategorilerden birine bağlanır (bire-çok ilişki).</p>
+        </div>
+        <div class="header-actions">
+            <a href="/Admin/Category/CreateCategory" class="btn-pastel-primary">
+                <i class="bi bi-plus-circle-fill"></i>
+                <span>Yeni Kategori</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="data-table-card">
+        <div class="table-responsive-wrapper">
+            <table class="custom-admin-table">
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">ID</th>
+                        <th>Kategori Adı</th>
+                        <th style="text-align: center;">Proje Sayısı</th>
+                        <th style="text-align: right; width: 120px;">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr><td colspan="4" class="empty-state">Henüz kategori eklenmemiş.</td></tr>
+                    }
+                    @foreach (var item in Model)
+                    {
+                        var projectCount = item.Projects?.Count ?? 0;
+                        <tr>
+                            <td class="col-id">#@item.CategoryId</td>
+                            <td class="fw-semibold">@item.CategoryName</td>
+                            <td style="text-align: center;"><span class="order-badge">@projectCount</span></td>
+                            <td style="text-align: right;">
+                                <div class="row-actions-group justify-content-end">
+                                    <a href="/Admin/Project/ProjectList?categoryId=@item.CategoryId" class="btn-action-icon btn-view" title="Bu kategorideki projeler">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="/Admin/Category/UpdateCategory/@item.CategoryId" class="btn-action-icon btn-edit" title="Güncelle">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <a href="/Admin/Category/DeleteCategory/@item.CategoryId" class="btn-action-icon btn-delete js-confirm-delete" title="Sil"
+                                       data-text="@(projectCount > 0 ? "Bu kategoriye bağlı " + projectCount + " proje var; önce projeleri başka kategoriye taşımalısınız." : "Kategori kalıcı olarak silinecek.")">
+                                        <i class="bi bi-trash3"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>

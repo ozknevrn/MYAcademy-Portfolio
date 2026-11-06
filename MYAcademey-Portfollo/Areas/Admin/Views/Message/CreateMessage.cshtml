@@ -1,0 +1,48 @@
+﻿@model Message
+@{
+    ViewData["Title"] = "Test Mesajı";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Test Mesajı Oluştur</h1>
+            <p class="page-subtitle">Gerçek mesajlar sitedeki iletişim formundan gelir. Bu ekran sadece test içindir.</p>
+        </div>
+    </div>
+
+    <div class="form-card">
+        <form method="post">
+            <div class="row">
+                <div class="col-md-6 form-group-custom">
+                    <label asp-for="SenderName" class="form-label-custom">Ad Soyad <span class="required-star">*</span></label>
+                    <input asp-for="SenderName" class="form-control-custom" />
+                    <span asp-validation-for="SenderName" class="field-error"></span>
+                </div>
+                <div class="col-md-6 form-group-custom">
+                    <label asp-for="SenderMail" class="form-label-custom">E-posta <span class="required-star">*</span></label>
+                    <input asp-for="SenderMail" type="email" class="form-control-custom" placeholder="ornek@mail.com" />
+                    <span asp-validation-for="SenderMail" class="field-error"></span>
+                </div>
+            </div>
+
+            <div class="form-group-custom">
+                <label asp-for="Subject" class="form-label-custom">Konu <span class="required-star">*</span></label>
+                <input asp-for="Subject" class="form-control-custom" />
+                <span asp-validation-for="Subject" class="field-error"></span>
+            </div>
+
+            <div class="form-group-custom">
+                <label asp-for="MessageDetail" class="form-label-custom">Mesaj <span class="required-star">*</span></label>
+                <textarea asp-for="MessageDetail" class="form-control-custom" rows="6"></textarea>
+                <span asp-validation-for="MessageDetail" class="field-error"></span>
+            </div>
+
+            <div class="form-actions">
+                <a href="/Admin/Message/MessageList" class="btn-pastel-secondary">Vazgeç</a>
+                <button type="submit" class="btn-pastel-primary">Gönder</button>
+            </div>
+        </form>
+    </div>
+</main>
