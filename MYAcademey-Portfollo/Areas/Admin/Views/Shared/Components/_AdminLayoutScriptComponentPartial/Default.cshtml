@@ -3,14 +3,13 @@
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 
-<!-- Bootstrap JS (modal pencereler için gerekli) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- SweetAlert2 (silme onayı ve bildirimler) -->
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    // 1. Mobil menü aç / kapat
+
     (function () {
         const sidebar = document.getElementById('adminSidebar');
         const sidebarToggle = document.getElementById('sidebarToggle');
@@ -25,8 +24,7 @@
         });
     })();
 
-    // 2. Silme onayı: class="js-confirm-delete" olan tüm linkler önce onay penceresi açar.
-    //    İsteğe bağlı: data-title ve data-text ile pencere metni değiştirilebilir.
+    
     document.addEventListener('click', function (e) {
         const link = e.target.closest('.js-confirm-delete');
         if (!link) return;
@@ -49,7 +47,7 @@
         });
     });
 
-    // 3. Kayıt işlemlerinden sonra gelen başarı / hata bildirimi
+  
     (function () {
         const flash = document.getElementById('flashMessages');
         if (!flash) return;
@@ -69,8 +67,7 @@
         }
     })();
 
-    // 4. Görsel seçildiğinde yüklemeden önce önizleme göster
-    //    <input type="file" data-preview="#onizlemeImg"> şeklinde kullanılır.
+  
     document.addEventListener('change', function (e) {
         const input = e.target;
         if (input.type !== 'file' || !input.dataset.preview) return;

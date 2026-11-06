@@ -1,5 +1,5 @@
 ﻿@{
-    // O an açık olan controller'ın adı. Menüde hangi linkin "active" olacağını belirler.
+   
     var controller = ViewContext.RouteData.Values["controller"]?.ToString();
     string Active(string name) => controller == name ? "active" : "";
     int unreadCount = ViewBag.UnreadMessageCount ?? 0;

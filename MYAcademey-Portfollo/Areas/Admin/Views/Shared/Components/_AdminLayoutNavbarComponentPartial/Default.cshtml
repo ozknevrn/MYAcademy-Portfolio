@@ -16,19 +16,19 @@
     </div>
 
     <div class="navbar-right">
-        <!-- Mesajlarda arama: Gelen Kutusu sayfasına arama kelimesiyle gider -->
+       
         <form class="nav-search-box" method="get" action="/Admin/Message/MessageList">
             <i class="bi bi-search"></i>
             <input type="text" name="search" placeholder="Mesajlarda ara..." id="navQuickSearch">
         </form>
 
-        <!-- Hızlı Ekle: yeni proje ekleme sayfası -->
+       
         <a href="/Admin/Project/CreateProject" class="btn-quick-add text-decoration-none">
             <i class="bi bi-plus-lg"></i>
             <span>Yeni Proje</span>
         </a>
 
-        <!-- Okunmamış mesajlar -->
+        
         <a href="/Admin/Message/MessageList?status=unread" class="icon-action-btn" title="Okunmamış mesajlar (@unreadCount)">
             <i class="bi bi-bell"></i>
             @if (unreadCount > 0)
@@ -37,12 +37,12 @@
             }
         </a>
 
-        <!-- Tüm mesajlar -->
+      
         <a href="/Admin/Message/MessageList" class="icon-action-btn" title="Gelen Mesajlar">
             <i class="bi bi-chat-left-text"></i>
         </a>
 
-        <!-- Profil -->
+       
         <div class="nav-profile-pill">
             <div class="nav-avatar-mini">ÖE</div>
             <span class="d-none d-sm-inline" style="font-size:0.825rem; font-weight:600;">Özkan Evren</span>

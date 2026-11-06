@@ -18,8 +18,7 @@ namespace MYAcademey_Portfollo.Controllers
             return View();
         }
 
-        // Sitedeki iletişim formu buraya gönderilir (JavaScript fetch ile).
-        // Data Annotations kuralları ModelState ile kontrol edilir; hatalar alan bazlı JSON olarak döner.
+    
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult SendMessage(Message message)
