@@ -6,6 +6,70 @@ ASP.NET Core MVC (.NET 8), Entity Framework Core (Code First) ve SQL Server ile 
 
 ---
 
+## Ekran Görüntüleri
+
+### Site (Kullanıcı Arayüzü)
+
+**Ana Sayfa** — isim, unvan, tanıtım ve fotoğraf admin panelinden yönetilir; alttaki unvanlar yazı makinesi efektiyle döner.
+
+![Ana Sayfa](docs/screenshots/01-site-anasayfa.png)
+
+**Hakkımda**
+
+![Hakkımda](docs/screenshots/02-site-hakkimda.png)
+
+**Yetenekler** — 0-100 seviye bilgisi ilerleme çubuğu olarak gösterilir.
+
+![Yetenekler](docs/screenshots/03-site-yetenekler.png)
+
+**Projeler** — sadece aktif projeler, en yeniden eskiye; kategori ve teknoloji etiketleriyle.
+
+![Projeler](docs/screenshots/04-site-projeler.png)
+
+**İletişim** — form sayfa yenilenmeden gönderilir, mesaj Gelen Kutusu'na düşer.
+
+![İletişim](docs/screenshots/05-site-iletisim.png)
+
+### Yönetim Paneli (Admin)
+
+**Dashboard** — istatistik kartları, son 5 mesaj, kategori özeti (GroupBy + Chart.js), son 3 proje ve hızlı erişim.
+
+![Dashboard](docs/screenshots/06-admin-dashboard.png)
+
+**Ana Sayfa Yönetimi** — hero bilgileri, profil fotoğrafı yükleme ve dönen unvanlar.
+
+![Ana Sayfa Yönetimi](docs/screenshots/07-admin-anasayfa.png)
+
+**Yetenek Yönetimi** — yetenek grupları ve gruplara bağlı yetenekler.
+
+![Yetenek Yönetimi](docs/screenshots/08-admin-yetenekler.png)
+
+**Proje Yönetimi** — kategori / durum filtresi, arama, sıralama, aktif-pasif.
+
+![Proje Yönetimi](docs/screenshots/09-admin-projeler.png)
+
+**Hakkımda Yönetimi** — tek kayıtlı alan, güncelleme odaklı ekran.
+
+![Hakkımda Yönetimi](docs/screenshots/11-admin-hakkimda.png)
+
+**Deneyim Yönetimi** — arama, durum filtresi, aktif/pasif.
+
+![Deneyim Yönetimi](docs/screenshots/12-admin-deneyimler.png)
+
+**Kategori Yönetimi** — her kategorideki proje sayısı; projesi olan kategori silinemez.
+
+![Kategori Yönetimi](docs/screenshots/13-admin-kategoriler.png)
+
+**Eğitim Yönetimi**
+
+![Eğitim Yönetimi](docs/screenshots/14-admin-egitim.png)
+
+**Gelen Mesajlar** — arama, okunmamış mesaj vurgusu, modal ile detay, okundu/okunmadı yönetimi.
+
+![Gelen Mesajlar](docs/screenshots/10-admin-mesajlar.png)
+
+---
+
 ## Kurulum
 
 1. Projeyi klonlayın ve Visual Studio 2022 ile `MYAcademey-Portfollo.sln` dosyasını açın.
